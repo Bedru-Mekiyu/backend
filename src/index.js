@@ -12,7 +12,7 @@ const startserver= async ()=>{
         await connectDB();
         app.on('error',(error)=>{
             console.log("error",error)
-            throw error;
+            throw new error
         })
 
     app.listen(process.env.PORT,()=>{
