@@ -1,86 +1,94 @@
 import { Post } from "../models/post.model.js";
 
-const createPost= async (req,res)=>{
+const createPost = async (req, res) => {
     try {
-     const {name,description,age}= req.body;
-     
-     if(!name|| !description|| !age){
-        return res.status(400).json({
-            message:"all the field are required"
-        });
-   
-        const post= await Post.create({name,description,age});
-        res.status(201).json({
-            message:"Post created successfully", post
-        })
+        const { name, description, age } = req.body;
 
-
-     }
-
-
-
-
-    } catch (error) {
-        res.status(500).json({
-            message:'internal server error'
-        })
-    }
-}
-
-const getposts= async(req,res)=>{
-    try {
-
-        const getposts=await Post.find();
-        res.status(200).json(post)
-        
-    } catch (error) {
-            res.status(500).json({
-            message:'internal server error'
-        })
-    }
-}
-
-
-const updatePost=async (req,res)=>{
-    try {
-
-        if(Object.keys(req.body).length===0){
+        if (!name || !description || !age) {
             return res.status(400).json({
-                message:"no data provided for update"
-            })
-
+                message: "All fields (name, description, age) are required"
+            });
         }
-        const post = await Post.findByIdAndUpdate(req.params.id,req.body, {new:true});
 
-        if(!post) return res.status(404).json({
-            message:"post not found"
+        const post = await Post.create({ name, description, age });
+
+        return res.status(201).json({
+            message: "Post created successfully",
+            post
         });
-        res.status(200).json({
-            message:"post updated successfully",post
-        })
-        
+
     } catch (error) {
-          res.status(500).json({
-            message:'internal server error'
-        }) 
+        console.error(error);
+        return res.status(500).json({
+            message: 'Internal server error'
+        });
     }
-}
+};
 
-
-const deletePost=async(req,res)=>{
+const getposts = async (req, res) => {
     try {
-
-        const deleted= await Post.findByIdAndDelete(req.params.id);
-        if(!deleted)return res.status(404).json({
-            message:"post not found"
-        })
-        res.status(200).json({
-            message:"post successfully deleted"
-        })
+        const posts = await Post.find(); // Fixed variable name
+        return res.status(200).json({
+            message: "Posts fetched successfully",
+            posts
+        });
     } catch (error) {
-           res.status(500).json({
-            message:'internal server error'
-        }) 
+        console.error(error);
+        return res.status(500).json({
+            message: 'Internal server error'
+        });
     }
-}
-export{createPost ,getposts,updatePost,deletePost}
+};
+
+const updatePost = async (req, res) => {
+    try {
+        if (Object.keys(req.body).length === 0) {
+            return res.status(400).json({
+                message: "No data provided for update"
+            });
+        }
+
+        const post = await Post.findByIdAndUpdate(req.params.id, req.body, { new: true });
+
+        if (!post) {
+            return res.status(404).json({
+                message: "Post not found"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Post updated successfully",
+            post
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            message: 'Internal server error'
+        });
+    }
+};
+
+const deletePost = async (req, res) => {
+    try {
+        const deleted = await Post.findByIdAndDelete(req.params.id);
+
+        if (!deleted) {
+            return res.status(404).json({
+                message: "Post not found"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Post successfully deleted"
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            message: 'Internal server error'
+        });
+    }
+};
+
+export { createPost, getposts, updatePost, deletePost };

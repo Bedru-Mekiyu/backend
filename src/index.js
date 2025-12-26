@@ -3,25 +3,26 @@ import connectDB from './config/database.js';
 import app from './app.js';
 
 dotenv.config({
-    path:'./.env'
+    path: './.env'
 });
 
-const startserver= async ()=>{
+const startServer = async () => {
     try {
-
         await connectDB();
-        app.on('error',(error)=>{
-            console.log("error",error)
-            throw new error
-        })
 
-    app.listen(process.env.PORT,()=>{
-        console.log(`the server is running on the port ${process.env.PORT}`)
-    })
+        const server = app.listen(process.env.PORT || 8000, () => {
+            console.log(`Server is running on port ${process.env.PORT || 8000}`);
+        });
 
-        
+        app.on('error', (error) => {
+            console.log("Express app error:", error);
+            throw error;
+        });
+
     } catch (error) {
-         console.error("the mongodb problem error")
+        console.error("MongoDB connection error:", error);
+        process.exit(1);
     }
-}
-startserver();
+};
+
+startServer();

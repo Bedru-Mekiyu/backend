@@ -1,14 +1,13 @@
-import express from 'express'
-const app=express()
+import express from 'express';
+const app = express();
 
-app.use(express.json())
+app.use(express.json());
 
-import userRouter from '../src/routes/user.route.js'
-import postRouter from '../src/routes/post.route.js'
+// Correct import paths (assuming folder structure: src/routes/...)
+import userRouter from './routes/user.route.js';
+import postRouter from './routes/post.route.js';
 
-app.use('/api/v1/users',userRouter)
-app.use('/api/v1/posts',postRouter)
-
-
+app.use('/api/v1/users', userRouter);
+app.use('/api/v1/posts', postRouter);
 
 export default app;
